@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,13 @@ class AvailabilityFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'user_id' => User::factory(),
+            'day_of_week' => $this->faker->numberBetween(0, 6),
+            'start_time' => '09:00',
+            'end_time' => '12:00',
+            'slot_duration' => $this->faker->randomElement([15, 30, 60]),
+            'created_at' => now(),
+            'updated_at' => now()
         ];
     }
 }
