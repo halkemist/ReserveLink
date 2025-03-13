@@ -11,8 +11,6 @@ class BookingController extends Controller
 {
     public function store(BookingRequest $request)
     {
-        dd('book');
-
         $authUserId = Auth::id();
         $validated = $request->validated();
 
@@ -50,5 +48,17 @@ class BookingController extends Controller
             abort(403, 'Unauthorized');
         }
         return view('bookings.confirmation', compact('booking'));
+    }
+
+    public function cancel(Booking $booking)
+    {
+        if(Auth::id() !== $booking->owner_id) {
+            abort(403, 'Unauthorized');
+        }
+        
+        $booking->status = 'canceled';
+        $booking->save();
+
+        return redirect()->route('booking.confirmation', $booking->id)->with('success', 'Booking has been canceled.');
     }
 }

@@ -11,6 +11,14 @@ class Booking extends Model
     /** @use HasFactory<\Database\Factories\BookingFactory> */
     use HasFactory;
 
+    protected $fillable = [
+        'owner_id',
+        'guest_email',
+        'start_time',
+        'end_time',
+        'status'
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

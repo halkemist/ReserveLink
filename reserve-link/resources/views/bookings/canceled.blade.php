@@ -1,7 +1,7 @@
 <x-guest-layout>
   <div class="container mx-auto px-4 py-8 max-w-5xl">
       <h1 class="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-gray-200">
-          Booking Confirmation
+          Booking Canceled
       </h1>
       
       <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">

@@ -22,6 +22,7 @@ Route::get('/calendar/{email}', [AvailabilitySlotController::class, 'showUserAva
 // Booking
 Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
 Route::get('/booking/confirmation/{booking}', [BookingController::class, 'confirmation'])->name('booking.confirmation');
+Route::delete('/booking/{booking}/cancel', [BookingController::class, 'cancel'])->name('booking.cancel');
 
 /**
  * Authentified Routes
