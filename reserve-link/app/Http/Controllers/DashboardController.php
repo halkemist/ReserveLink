@@ -16,7 +16,7 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         
-        // Get incoming meeting
+        // Get upcoming appointments
         $upcomingBookings = Booking::where(function($query) use ($user) {
                 $query->where('owner_id', $user->id)
                     ->orWhere('user_id', $user->id);
