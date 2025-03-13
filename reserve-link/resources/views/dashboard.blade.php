@@ -88,14 +88,15 @@
                                             <a href="{{ route('availability.edit', $availability->id) }}" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm">
                                                 Edit
                                             </a>
-                                            <form method="POST" action="{{ route('availability.destroy', $availability->id) }}" 
-                                                  onsubmit="return confirm('Are you sure you want to delete this availability?');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 text-sm">
-                                                    Delete
-                                                </button>
-                                            </form>
+                                            <form action="{{ route('availability.destroy', $availability->id) }}" 
+                                                method="POST"
+                                                onsubmit="return confirm('Are you sure you want to delete this availability?');">
+                                              @csrf
+                                              @method('DELETE')
+                                              <button type="submit" class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 text-sm">
+                                                  Delete
+                                              </button>
+                                          </form>
                                         </div>
                                     </div>
                                 </li>

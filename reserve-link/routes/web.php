@@ -19,12 +19,21 @@ Route::get('/booking/create', function () {
 })->name('booking.create');
 
 Route::middleware(['auth'])->group(function () {
-    // Dashboard
+    // Dashboard and availabilities management
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/add-availability', function() {
         return view('calendar.add-availability');
     })->name('availability.add');
     Route::post('/availabilities/store', [AvailabilityController::class, 'store'])->name('availability.store');
+    Route::get('/availabilities/{availabilityId}', function() {
+        return view('calendar.edit-availability');
+    })->name('availability.edit');
+    // TODO -> route put to edit availability
+
+    Route::delete('/availabilities/{availabilityId}', [AvailabilityController::class, 'destroy'])->name('availability.destroy');
+
+    // Booking
+    // TODO
     
     // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

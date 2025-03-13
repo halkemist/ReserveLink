@@ -11,7 +11,7 @@ class AvailabilityController extends Controller
 {
     public function store(AvailabilityRequest $request)
     {
-        $authUserId = Auth::user()->id;
+        $authUserId = Auth::id();
         $validated = $request->validated();
 
         // Check if a slot exist at the same time for the same day
@@ -35,5 +35,16 @@ class AvailabilityController extends Controller
         ]);
 
         return redirect()->route('dashboard')->with('success', 'Your availability has been successfully added.');
+    }
+
+    public function destroy($availabilityId)
+    {
+        $availability = Availability::findOrFail($availabilityId);
+        if ($availability->user_id !== Auth::id()) {
+            return abort(403, 'Unauthorized');
+        }
+        $availability->delete();
+        
+        return redirect()->route('dashboard')->with('success', 'Your availability has been successfully removed.');
     }
 }
