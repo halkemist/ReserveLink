@@ -1,0 +1,39 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\AvailabilityRequest;
+use App\Models\Availability;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class AvailabilityController extends Controller
+{
+    public function store(AvailabilityRequest $request)
+    {
+        $authUserId = Auth::user()->id;
+        $validated = $request->validated();
+
+        // Check if a slot exist at the same time for the same day
+        $existingOverlap = Availability::where('user_id', $authUserId)
+            ->where('day_of_week', $validated['day_of_week'])
+            ->where(function ($q) use ($validated) {
+                $q->where('start_time', '<', $validated['end_time'])
+                  ->where('end_time', '>', $validated['start_time']);
+            })->first();
+
+        if ($existingOverlap) {
+            return back()->withInput()->withErrors(['overlap' => 'This new time slot overlaps an existing one.']);
+        }
+
+        Availability::create([
+            'user_id' => $authUserId,
+            'day_of_week' => $validated['day_of_week'],
+            'start_time' => $validated['start_time'],
+            'end_time' => $validated['end_time'],
+            'slot_duration' => $validated['slot_duration'],
+        ]);
+
+        return redirect()->route('dashboard')->with('success', 'Your availability has been successfully added.');
+    }
+}

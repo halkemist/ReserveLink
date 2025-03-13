@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AvailabilityController;
 use App\Http\Controllers\AvailabilitySlotController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
@@ -23,6 +24,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard/add-availability', function() {
         return view('calendar.add-availability');
     })->name('availability.add');
+    Route::post('/availabilities/store', [AvailabilityController::class, 'store'])->name('availability.store');
     
     // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

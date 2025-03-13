@@ -16,6 +16,14 @@ class Availability extends Model
      */
     protected $table = 'availabilities';
 
+    protected $fillable = [
+        'user_id',
+        'day_of_week',
+        'start_time',
+        'end_time',
+        'slot_duration'
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

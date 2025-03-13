@@ -44,10 +44,4 @@ class DashboardController extends Controller
         
         return view('dashboard', compact('upcomingBookings', 'availabilities', 'dayNames'));
     }
-
-    public function store(AvailabilityRequest $request)
-    {
-        $authUser = Auth::user();
-        $authUser->availabilities->create($request->validated());
-    }
 }
