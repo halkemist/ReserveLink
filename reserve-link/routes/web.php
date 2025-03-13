@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AvailabilityController;
 use App\Http\Controllers\AvailabilitySlotController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Availability;
@@ -19,9 +20,8 @@ Route::get('/', function () {
 Route::get('/calendar/{email}', [AvailabilitySlotController::class, 'showUserAvailabilities'])->name('calendar');
 
 // Booking
-Route::get('/booking/create', function () {
-    return 'reservation done';
-})->name('booking.create');
+Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
+Route::get('/booking/confirmation/{booking}', [BookingController::class, 'confirmation'])->name('booking.confirmation');
 
 /**
  * Authentified Routes

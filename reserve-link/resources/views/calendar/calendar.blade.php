@@ -41,14 +41,21 @@
                             
                             <div class="p-2 flex flex-col space-y-2 max-h-64 overflow-y-auto">
                                 @foreach($dateGroup['slots'] as $slot)
-                                    <a href="{{ route('booking.create', ['user' => $user->id, 'start' => $slot['start_time'], 'end' => $slot['end_time']]) }}" 
-                                       class="p-3 text-center rounded-md border border-gray-200 dark:border-gray-600 hover:bg-blue-50 dark:hover:bg-blue-900 transition-colors duration-200 text-blue-600 dark:text-blue-300 font-medium">
-                                        {{ \Carbon\Carbon::parse($slot['start_time'])->format('H:i') }} - 
-                                        {{ \Carbon\Carbon::parse($slot['end_time'])->format('H:i') }}
-                                        <span class="text-xs text-gray-500 dark:text-gray-400 block mt-1">
-                                            {{ $slot['duration'] }} min
-                                        </span>
-                                    </a>
+                                    <form method="POST" action="{{ route('booking.store') }}" class="inline">
+                                        @csrf
+                                        <input type="hidden" name="owner_id" value="{{ $user->id }}">
+                                        <input type="hidden" name="start_time" value="{{ $slot['start_time'] }}">
+                                        <input type="hidden" name="end_time" value="{{ $slot['end_time'] }}">
+                                        
+                                        <button type="submit" 
+                                                class="w-full p-3 text-center rounded-md border border-gray-200 dark:border-gray-600 hover:bg-blue-50 dark:hover:bg-blue-900 transition-colors duration-200 text-blue-600 dark:text-blue-300 font-medium">
+                                            {{ \Carbon\Carbon::parse($slot['start_time'])->format('H:i') }} - 
+                                            {{ \Carbon\Carbon::parse($slot['end_time'])->format('H:i') }}
+                                            <span class="text-xs text-gray-500 dark:text-gray-400 block mt-1">
+                                                {{ $slot['duration'] }} min
+                                            </span>
+                                        </button>
+                                    </form>
                                 @endforeach
                             </div>
                         </div>
