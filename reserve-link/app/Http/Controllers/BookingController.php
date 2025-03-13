@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\BookingRequest;
+use App\Mail\BookingConfirmation;
 use App\Models\Booking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class BookingController extends Controller
 {
@@ -37,7 +39,7 @@ class BookingController extends Controller
 
         $booking = Booking::create($validated);
 
-        // TODO -> send a confirmation email
+        Mail::to('test@gmail.com')->send(new BookingConfirmation($booking));
 
         return redirect()->route('booking.confirmation', $booking->id)->with('success', 'Your booking has been successfully created.');
     }
