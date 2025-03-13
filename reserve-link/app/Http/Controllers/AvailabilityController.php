@@ -37,10 +37,23 @@ class AvailabilityController extends Controller
         return redirect()->route('dashboard')->with('success', 'Your availability has been successfully added.');
     }
 
+    public function update($availabilityId, AvailabilityRequest $request)
+    {
+        $authUserId = Auth::id();
+
+        $availability = Availability::findOrFail($availabilityId);
+        if ($availability->user_id !== $authUserId) { // TODO -> policy
+            return abort(403, 'Unauthorized');
+        }
+        $availability->update($request->validated());
+
+        return redirect()->route('dashboard')->with('success', 'Availability updated successfully');
+    }
+
     public function destroy($availabilityId)
     {
         $availability = Availability::findOrFail($availabilityId);
-        if ($availability->user_id !== Auth::id()) {
+        if ($availability->user_id !== Auth::id()) { // TODO -> policy
             return abort(403, 'Unauthorized');
         }
         $availability->delete();

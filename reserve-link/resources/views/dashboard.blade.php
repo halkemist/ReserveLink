@@ -84,7 +84,7 @@
                                                 Time slot duration: {{ $availability->slot_duration }} minutes
                                             </p>
                                         </div>
-                                        <div class="flex space-x-3">
+                                        <div class="flex space-x-3 items-center">
                                             <a href="{{ route('availability.edit', $availability->id) }}" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm">
                                                 Edit
                                             </a>

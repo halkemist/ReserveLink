@@ -4,36 +4,52 @@ use App\Http\Controllers\AvailabilityController;
 use App\Http\Controllers\AvailabilitySlotController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Availability;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
+/**
+ * Guest Routes
+ */
 Route::get('/', function () {
     return view('welcome');
 });
 
 // Availabilities
-Route::get('/availabilities/{email}', [AvailabilitySlotController::class, 'showUserAvailabilities'])->name('calendar');
+Route::get('/calendar/{email}', [AvailabilitySlotController::class, 'showUserAvailabilities'])->name('calendar');
 
 // Booking
 Route::get('/booking/create', function () {
     return 'reservation done';
 })->name('booking.create');
 
+/**
+ * Authentified Routes
+ */
 Route::middleware(['auth'])->group(function () {
-    // Dashboard and availabilities management
+    // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Dashboard - Add Availability
     Route::get('/dashboard/add-availability', function() {
         return view('calendar.add-availability');
     })->name('availability.add');
     Route::post('/availabilities/store', [AvailabilityController::class, 'store'])->name('availability.store');
-    Route::get('/availabilities/{availabilityId}', function() {
-        return view('calendar.edit-availability');
+
+    // Dashboard - Edit Availability
+    Route::get('/availabilities/{availabilityId}', function($availabilityId) { // TODO -> refacto function into a controller
+        $availability = Availability::findOrFail($availabilityId);
+
+        if ($availability->user_id !== Auth::id()) { // TODO -> policy
+            abort(403, 'Unauthorized.');
+        }
+
+        return view('calendar.edit-availability', compact('availability'));
     })->name('availability.edit');
-    // TODO -> route put to edit availability
+    Route::put('/availabilities/{availabilityId}', [AvailabilityController::class, 'update'])->name('availability.update');
 
+    // Dashboard - Delete Availability
     Route::delete('/availabilities/{availabilityId}', [AvailabilityController::class, 'destroy'])->name('availability.destroy');
-
-    // Booking
-    // TODO
     
     // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
