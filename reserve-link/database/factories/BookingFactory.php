@@ -19,8 +19,7 @@ class BookingFactory extends Factory
     public function definition(): array
     {
         $startTime = $this->faker->dateTimeBetween('next Monday', '+10 days');
-        $duration = $this->faker->randomElement([15, 30, 60]);
-        $endTime = Carbon::instance($startTime)->addMinutes($duration);
+        $endTime = Carbon::instance($startTime)->addMinutes(60);
 
         return [
             'user_id' => null,

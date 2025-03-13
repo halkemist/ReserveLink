@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AvailabilityController;
+use App\Http\Controllers\AvailabilitySlotController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -11,6 +12,12 @@ Route::get('/', function () {
 Route::get('/test', function () {
     return 'hello';
 });
+
+Route::get('/availabilities/{email}', [AvailabilitySlotController::class, 'showUserAvailabilities']);
+
+Route::get('/booking/create', function () {
+    return 'reservation done';
+})->name('booking.create');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

@@ -22,7 +22,7 @@ class AvailabilityFactory extends Factory
             'day_of_week' => $this->faker->numberBetween(0, 6),
             'start_time' => '09:00',
             'end_time' => '12:00',
-            'slot_duration' => $this->faker->randomElement([15, 30, 60]),
+            'slot_duration' => 60,
             'created_at' => now(),
             'updated_at' => now()
         ];

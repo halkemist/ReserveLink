@@ -25,7 +25,7 @@ class AvailabilityRequest extends FormRequest
             'day_of_week' => 'required|integer|between:0,6',
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
-            'slot_duration' => 'required|integer|min:15|max:60'
+            'slot_duration' => 'required|integer|min:60|max:60'
         ];
     }
 }
