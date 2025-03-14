@@ -38,7 +38,7 @@ class BookingRequest extends FormRequest
         return [
             'user_id' => 'nullable|exists:users,id',
             'owner_id' => 'required|exists:users,id',
-            'guest_email' => 'nullable|email|max:255',
+            'guest_email' => 'required|email|max:255',
             'start_time' => 'required|date|after_or_equal:now',
             'end_time' => 'required|date|after:start_time',
             'status' => 'required|in:confirmed,canceled,past'

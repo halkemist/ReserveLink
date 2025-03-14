@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
             $table->foreignId('owner_id')->constrained('users')->onDelete('cascade');
-            $table->string('guest_email')->nullable();
+            $table->string('guest_email');
             $table->dateTime('start_time');
             $table->dateTime('end_time');
             $table->enum('status', ['confirmed', 'canceled', 'past'])->default('confirmed');

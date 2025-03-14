@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\BookingRequest;
+use App\Mail\BookingCancelation;
 use App\Mail\BookingConfirmation;
 use App\Models\Booking;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -39,7 +41,8 @@ class BookingController extends Controller
 
         $booking = Booking::create($validated);
 
-        Mail::to('test@gmail.com')->send(new BookingConfirmation($booking));
+        // Send confirmation mail
+        Mail::to($validated['guest_email'])->send(new BookingConfirmation($booking));
 
         return redirect()->route('booking.confirmation', $booking->id)->with('success', 'Your booking has been successfully created.');
     }
@@ -60,6 +63,13 @@ class BookingController extends Controller
         
         $booking->status = 'canceled';
         $booking->save();
+
+        // Send confirmation mails
+        Mail::to($booking->guest_email)->send(new BookingCancelation($booking, false));
+        $ownerEmail = User::find($booking->owner_id)->first()->pluck('email');
+        if ($ownerEmail) {
+            Mail::to($ownerEmail)->send(new BookingCancelation($booking, true));
+        }
 
         return redirect()->route('booking.confirmation', $booking->id)->with('success', 'Booking has been canceled.');
     }
