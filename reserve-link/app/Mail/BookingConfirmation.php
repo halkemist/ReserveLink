@@ -42,7 +42,8 @@ class BookingConfirmation extends Mailable
                 'ownerId' => $this->booking->owner_id,
                 'startTime' => $this->booking->start_time,
                 'endTime' => $this->booking->end_time,
-                'status' => $this->booking->status
+                'status' => $this->booking->status,
+                'meet_link' => $this->booking->meet_link
             ],
         );
     }

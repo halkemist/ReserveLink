@@ -7,12 +7,20 @@ use App\Mail\BookingCancelation;
 use App\Mail\BookingConfirmation;
 use App\Models\Booking;
 use App\Models\User;
+use App\Services\JitsiMeetService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
 class BookingController extends Controller
 {
+    private $jitsiService;
+
+    public function __construct(JitsiMeetService $jitsiService)
+    {
+        $this->jitsiService = $jitsiService;
+    }
+
     public function store(BookingRequest $request)
     {
         $authUserId = Auth::id();
@@ -39,7 +47,11 @@ class BookingController extends Controller
             $validated['user_id'] = $authUserId;
         }
 
+        // Store the new booking entry
         $booking = Booking::create($validated);
+
+        // Create and store the meeting link
+        $this->jitsiService->createMeeting($booking);
 
         // Send confirmation mail
         Mail::to($validated['guest_email'])->send(new BookingConfirmation($booking));
@@ -49,7 +61,7 @@ class BookingController extends Controller
 
     public function confirmation(Booking $booking)
     {
-        if (Auth::id() !== $booking->user_id && Auth::id() !== $booking->owner_id) {
+        if (Auth::id() !== $booking->user_id && Auth::id() !== $booking->owner_id) { // TODO -> policy
             abort(403, 'Unauthorized');
         }
         return view('bookings.confirmation', compact('booking'));
@@ -57,7 +69,7 @@ class BookingController extends Controller
 
     public function cancel(Booking $booking)
     {
-        if(Auth::id() !== $booking->owner_id) {
+        if(Auth::id() !== $booking->owner_id) { // TODO -> policy
             abort(403, 'Unauthorized');
         }
         

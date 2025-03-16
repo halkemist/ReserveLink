@@ -41,7 +41,8 @@ class BookingRequest extends FormRequest
             'guest_email' => 'required|email|max:255',
             'start_time' => 'required|date|after_or_equal:now',
             'end_time' => 'required|date|after:start_time',
-            'status' => 'required|in:confirmed,canceled,past'
+            'status' => 'required|in:confirmed,canceled,past',
+            'meet_link' => 'sometimes|nullable|max:255|url:https'
         ];
     }
 }
