@@ -24,14 +24,17 @@ class JitsiMeetService
 
   public function createMeeting(Booking $booking)
   {
+    $booking->meetingUrl = $this->generateMeetLink($booking->id);
+    $booking->save();
+  }
+
+  public function generateMeetLink($bookingId)
+  {
     // Create an unique meeting ID
-    $meetingId = 'reservelink-' . $booking->id . '-' . Str::random(6);
+    $meetingId = 'reservelink-' . $bookingId . '-' . Str::random(6);
 
     // Build the meeting URL
-    $meetingUrl = 'https://' . $this->domain . '/' . $meetingId;
-
-    // Save in DB
-    // TODO -> new field in booking table
+    return 'https://' . $this->domain . '/' . $meetingId;
   }
 
 }
