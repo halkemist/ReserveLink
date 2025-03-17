@@ -2,6 +2,7 @@
   Booking Confirmation
 </div>
 
+<a href={{ $meetLink }}>{{ $meetLink }}</a>
 <div>
   ownerId: {{ $ownerId }}
 </div>

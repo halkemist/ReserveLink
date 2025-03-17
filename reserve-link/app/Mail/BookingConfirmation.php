@@ -43,7 +43,7 @@ class BookingConfirmation extends Mailable
                 'startTime' => $this->booking->start_time,
                 'endTime' => $this->booking->end_time,
                 'status' => $this->booking->status,
-                'meet_link' => $this->booking->meet_link
+                'meetLink' => $this->booking->meet_link
             ],
         );
     }

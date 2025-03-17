@@ -37,21 +37,19 @@ class BookingController extends Controller
                 $q2->where('start_time', '=', $validated['start_time'])
                       ->where('end_time', '=', $validated['end_time']);
             });
-        })->exists()
+        })->exists() // TODO -> in a policy
             ) {
             abort(403, 'An appointment has already been scheduled for this slot');
-        }
-
-        // In case of an connected user
-        if (!isset($validated['user_id']) && $authUserId) {
-            $validated['user_id'] = $authUserId;
         }
 
         // Store the new booking entry
         $booking = Booking::create($validated);
 
         // Create and store the meeting link
-        $this->jitsiService->createMeeting($booking);
+        $this->jitsiService->createMeeting($booking); // TODO -> turn into repository / generic service
+
+        // Update nbooking instance to get the last meeting added link
+        $booking->refresh();
 
         // Send confirmation mail
         Mail::to($validated['guest_email'])->send(new BookingConfirmation($booking));

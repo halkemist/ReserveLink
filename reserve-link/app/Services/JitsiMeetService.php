@@ -24,7 +24,7 @@ class JitsiMeetService
 
   public function createMeeting(Booking $booking)
   {
-    $booking->meetingUrl = $this->generateMeetLink($booking->id);
+    $booking->meet_link = $this->generateMeetLink($booking->id);
     $booking->save();
   }
 
