@@ -8,8 +8,8 @@ use App\Mail\BookingConfirmation;
 use App\Models\Booking;
 use App\Models\User;
 use App\Services\JitsiMeetService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
 
 class BookingController extends Controller
@@ -23,7 +23,6 @@ class BookingController extends Controller
 
     public function store(BookingRequest $request)
     {
-        $authUserId = Auth::id();
         $validated = $request->validated();
 
         // Check if a booking on the selected time slot exist
@@ -59,17 +58,12 @@ class BookingController extends Controller
 
     public function confirmation(Booking $booking)
     {
-        if (Auth::id() !== $booking->user_id && Auth::id() !== $booking->owner_id) { // TODO -> policy
-            abort(403, 'Unauthorized');
-        }
         return view('bookings.confirmation', compact('booking'));
     }
 
     public function cancel(Booking $booking)
     {
-        if(Auth::id() !== $booking->owner_id) { // TODO -> policy
-            abort(403, 'Unauthorized');
-        }
+        $this->authorize('cancel', $booking);
         
         $booking->status = 'canceled';
         $booking->save();

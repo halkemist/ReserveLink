@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\AvailabilityRequest;
 use App\Models\Availability;
 use App\Models\Booking;
 use Illuminate\Support\Facades\Auth;
@@ -33,13 +32,13 @@ class DashboardController extends Controller
         
         // Week days
         $dayNames = [
-            0 => 'Dimanche',
-            1 => 'Lundi',
-            2 => 'Mardi',
-            3 => 'Mercredi',
-            4 => 'Jeudi',
-            5 => 'Vendredi',
-            6 => 'Samedi',
+            0 => 'Sunday',
+            1 => 'Monday',
+            2 => 'Tuesday',
+            3 => 'Wednesday',
+            4 => 'Thursday',
+            5 => 'Friday',
+            6 => 'Saturday',
         ];
         
         return view('dashboard', compact('upcomingBookings', 'availabilities', 'dayNames'));
