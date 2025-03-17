@@ -20,20 +20,31 @@
                                 <li class="p-4 hover:bg-gray-50 dark:hover:bg-gray-700">
                                     <div class="flex items-center justify-between flex-wrap gap-2">
                                         <div>
-                                            <p class="font-medium">
-                                                {{ \Carbon\Carbon::parse($booking->start_time)->format('d/m/Y') }}
-                                                <span class="ml-2 font-normal text-gray-600 dark:text-gray-300">
-                                                    {{ \Carbon\Carbon::parse($booking->start_time)->format('H:i') }} - 
-                                                    {{ \Carbon\Carbon::parse($booking->end_time)->format('H:i') }}
+                                            <div class="flex gap-3 items-center">
+                                                <p class="font-medium">
+                                                    {{ \Carbon\Carbon::parse($booking->start_time)->format('d/m/Y') }}
+                                                    <span class="ml-2 font-normal text-gray-600 dark:text-gray-300">
+                                                        {{ \Carbon\Carbon::parse($booking->start_time)->format('H:i') }} - 
+                                                        {{ \Carbon\Carbon::parse($booking->end_time)->format('H:i') }}
+                                                    </span>
+                                                </p>
+                                                <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset
+                                                    @if($booking->status == 'canceled')
+                                                        bg-red-50 text-red-700 ring-red-600/10
+                                                    @elseif($booking->status == 'past')
+                                                        bg-gray-50 text-gray-700 ring-gray-600/20
+                                                    @elseif($booking->status == 'confirmed')
+                                                        bg-green-50 text-green-800 ring-green-600/20
+                                                    @endif">
+                                                    {{ $booking->status }}
                                                 </span>
-                                            </p>
-                                            <p class="text-sm text-gray-500 dark:text-gray-400">
-                                                @if($booking->is_owner)
-                                                    With: {{ $booking->user->name }}
-                                                @else
-                                                    With: {{ $booking->owner->name }}
-                                                @endif
-                                            </p>
+                                            </div>
+                                            <div class="flex gap-3 items-center">
+                                                <p class="text-sm text-gray-500 dark:text-gray-400">
+                                                    With: {{ $booking->guest_email }}
+                                                </p>
+                                                <a href={{ $booking->meet_link }} class="text-sm text-blue-500" target="_blank" alt="Meeting Link">{{ $booking->meet_link }}</a>
+                                            </div>
                                         </div>
                                         <form method="POST" action="{{ route('booking.cancel', $booking->id) }}" 
                                               onsubmit="return confirm('Are you sure you want to cancel this appointment?');">
