@@ -6,14 +6,14 @@ use App\Models\Booking;
 use App\Models\User;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
-use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 /**
  * Manage slot booking (guest and auth users).
  */
 class AvailabilitySlotController extends Controller
 {
-    public function showUserAvailabilities($email)
+    public function showUserAvailabilities($email): View
     {
         // Find the user with email and load availabilities
         $user = User::where('email', $email)->with('availabilities')->first();

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Availability;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -57,5 +58,39 @@ class AvailabilityControllerTest extends TestCase
 
       // Assert DB values
       $this->assertDatabaseHas('availabilities', $params);
+    }
+
+    /**
+     * Can't create a slot if another slot exists on the same time.
+     */
+    public function test_cant_overlap_an_existing_availability(): void
+    {
+      $user = User::factory()->create();
+
+      $params = [
+        'user_id' => $user->id,
+        'day_of_week' => 0,
+        'start_time' => '10:00',
+        'end_time' => '15:00',
+        'slot_duration' => 60,
+      ];
+
+      // Create a first entry
+      Availability::create($params);
+
+      // User create a new one with the same time slot to overlap
+      $this->actingAs($user);
+      $response = $this->post(route('availability.store'), $params);
+      $response->assertSessionHasErrors('overlap');
+
+      // Be sure that the last one was not created in DB
+      $count = Availability::where('user_id', $user->id)
+        ->where('day_of_week', $params['day_of_week'])
+        ->where('start_time', $params['start_time'])
+        ->where('end_time', $params['end_time'])
+        ->where('slot_duration', $params['slot_duration'])
+        ->count();
+
+      $this->assertEquals(1, $count);
     }
 }
