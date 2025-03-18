@@ -51,7 +51,7 @@ class BookingController extends Controller
         $booking->refresh();
 
         // Send confirmation mail
-        Mail::to($validated['guest_email'])->send(new BookingConfirmation($booking));
+        Mail::to($validated['guest_email'])->send(new BookingConfirmation($booking)); // TODO -> put in a job
 
         return redirect()->route('booking.confirmation', $booking->id)->with('success', 'Your booking has been successfully created.');
     }
@@ -72,7 +72,7 @@ class BookingController extends Controller
         Mail::to($booking->guest_email)->send(new BookingCancelation($booking, false));
         $ownerEmail = User::find($booking->owner_id)->first()->pluck('email');
         if ($ownerEmail) {
-            Mail::to($ownerEmail)->send(new BookingCancelation($booking, true));
+            Mail::to($ownerEmail)->send(new BookingCancelation($booking, true)); // TODO -> put in a job
         }
 
         return redirect()->route('booking.confirmation', $booking->id)->with('success', 'Booking has been canceled.');
