@@ -24,8 +24,15 @@ cd reserve-link
 
 ## Every day usage
 
+### Up containers & Compile front end
 ```bash
 cd reserve-link
 .vendor/bin/sail up -d
 .vendor/bin/sail npm run dev
+```
+
+### Run feature tests
+```bash
+cd reserve-link
+./vendor/bin/sail artisan test --testsuite=Feature
 ```
