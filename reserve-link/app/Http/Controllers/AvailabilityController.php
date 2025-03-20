@@ -23,7 +23,9 @@ class AvailabilityController extends Controller
             })->first();
 
         if ($existingOverlap) {
-            return back()->withInput()->withErrors(['overlap' => 'This new time slot overlaps an existing one.']);
+            return back()
+                ->withInput()
+                ->withErrors(['overlap' => 'This new time slot overlaps an existing one.']);
         }
 
         Availability::create([
@@ -34,7 +36,9 @@ class AvailabilityController extends Controller
             'slot_duration' => $validated['slot_duration'],
         ]);
 
-        return redirect()->route('dashboard')->with('success', 'Your availability has been successfully added.');
+        return redirect()
+            ->route('dashboard')
+            ->with('success', 'Your availability has been successfully added.');
     }
 
     public function update($availabilityId, AvailabilityRequest $request)
@@ -45,7 +49,9 @@ class AvailabilityController extends Controller
 
         $availability->update($request->validated());
 
-        return redirect()->route('dashboard')->with('success', 'Availability updated successfully');
+        return redirect()
+            ->route('dashboard')
+            ->with('success', 'Availability updated successfully');
     }
 
     public function destroy($availabilityId)
@@ -56,6 +62,8 @@ class AvailabilityController extends Controller
 
         $availability->delete();
         
-        return redirect()->route('dashboard')->with('success', 'Your availability has been successfully removed.');
+        return redirect()
+            ->route('dashboard')
+            ->with('success', 'Your availability has been successfully removed.');
     }
 }

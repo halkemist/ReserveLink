@@ -36,9 +36,9 @@ class BookingController extends Controller
                     $q2->where('start_time', '=', $validated['start_time'])
                         ->where('end_time', '=', $validated['end_time']);
                 });
-            })->exists(); // TODO -> in a policy or model
+            })->exists(); // TODO -> in a repository/model
         
-        abort_if($slotExists, 403, "An appointment has already been scheduled for this slot");
+        abort_if($slotExists, 403, "An appointment has already been scheduled for this slot"); // TODO -> create a policy
 
         // Store the new booking entry
         $booking = Booking::create($validated);
