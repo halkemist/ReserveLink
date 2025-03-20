@@ -39,12 +39,10 @@ class AvailabilityController extends Controller
 
     public function update($availabilityId, AvailabilityRequest $request)
     {
-        $authUserId = Auth::id();
-
         $availability = Availability::findOrFail($availabilityId);
-        if ($availability->user_id !== $authUserId) { // TODO -> policy
-            return abort(403, 'Unauthorized');
-        }
+        
+        $this->authorize('update', $availability);
+
         $availability->update($request->validated());
 
         return redirect()->route('dashboard')->with('success', 'Availability updated successfully');
@@ -53,9 +51,9 @@ class AvailabilityController extends Controller
     public function destroy($availabilityId)
     {
         $availability = Availability::findOrFail($availabilityId);
-        if ($availability->user_id !== Auth::id()) { // TODO -> policy
-            return abort(403, 'Unauthorized');
-        }
+        
+        $this->authorize('delete', $availability);
+
         $availability->delete();
         
         return redirect()->route('dashboard')->with('success', 'Your availability has been successfully removed.');

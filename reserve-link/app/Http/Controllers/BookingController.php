@@ -26,20 +26,19 @@ class BookingController extends Controller
         $validated = $request->validated();
 
         // Check if a booking on the selected time slot exist
-        if (Booking::where('owner_id', $validated['owner_id'])
+        $slotExists = Booking::where('owner_id', $validated['owner_id'])
             ->where('status', '!=', 'canceled')
             ->where(function ($q) use ($validated) {
-            $q->where(function($q2) use ($validated) {
-                $q2->where('start_time', '<', $validated['end_time'])
-                      ->where('end_time', '>', $validated['start_time']);
-            })->orWhere(function($q2) use ($validated) {
-                $q2->where('start_time', '=', $validated['start_time'])
-                      ->where('end_time', '=', $validated['end_time']);
-            });
-        })->exists() // TODO -> in a policy
-            ) {
-            abort(403, 'An appointment has already been scheduled for this slot');
-        }
+                $q->where(function($q2) use ($validated) {
+                    $q2->where('start_time', '<', $validated['end_time'])
+                        ->where('end_time', '>', $validated['start_time']);
+                })->orWhere(function($q2) use ($validated) {
+                    $q2->where('start_time', '=', $validated['start_time'])
+                        ->where('end_time', '=', $validated['end_time']);
+                });
+            })->exists(); // TODO -> in a policy or model
+        
+        abort_if($slotExists, 403, "An appointment has already been scheduled for this slot");
 
         // Store the new booking entry
         $booking = Booking::create($validated);

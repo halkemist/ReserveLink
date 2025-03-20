@@ -17,10 +17,8 @@ class AvailabilitySlotController extends Controller
     {
         // Find the user with email and load availabilities
         $user = User::where('email', $email)->with('availabilities')->first();
-
-        if (!$user) {
-            abort(404, "User not found");
-        }
+        
+        abort_if(!$user, 404, "User not found");
 
         // Look at next 30 days only
         $startDate = Carbon::today();
