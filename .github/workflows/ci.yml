@@ -1,0 +1,52 @@
+name: Launch Test
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  tests:
+    name: Laravel Tests
+    if: contains(github.event.head_commit.message, '@test')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Copy .env.example
+        run: cp .env.example .env
+        working-directory: ./reserve-link
+
+      - name: Install composer dependencies
+        run: |
+          docker run --rm \
+            -v $(pwd):/opt \
+            -w /opt \
+            composer install --ignore-platform-reqs --no-scripts
+        working-directory: ./reserve-link
+
+      - name: Generate app key
+        run: ./vendor/bin/sail artisan key:generate --force
+        working-directory: ./reserve-link
+
+      - name: Start sail
+        run: ./vendor/bin/sail up -d
+        working-directory: ./reserve-link
+
+      - name: Run tests
+        run: ./vendor/bin/sail artisan test
+        working-directory: ./reserve-link
+
+      - name: Show tests logs
+        if: failure()
+        run: ./vendor/bin/sail logs
+        working-directory: ./reserve-link
+
+      - name: Stop sail
+        if: always()
+        run: ./vendor/bin/sail down
+        working-directory: ./reserve-link
+
+
+      
