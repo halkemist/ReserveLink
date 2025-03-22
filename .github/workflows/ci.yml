@@ -34,6 +34,10 @@ jobs:
         run: ./vendor/bin/sail artisan key:generate --force
         working-directory: ./reserve-link
 
+      - name: DB migration
+        run: ./vendor/bin/sail artisan migrate:fresh
+        working-directory: ./reserve-link
+
       - name: Run tests
         run: ./vendor/bin/sail artisan test
         working-directory: ./reserve-link
