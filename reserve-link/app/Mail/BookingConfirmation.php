@@ -60,8 +60,7 @@ class BookingConfirmation extends Mailable
     public function attachments(): array
     {
         $icsComponent = iCalService::generateIcsFile(
-            'Bonjour',
-            'Description',
+            'Meeting with ' . $this->booking->guest_email,
             $this->booking->meet_link,
             User::findOrFail($this->booking->owner_id),
             $this->booking->start_time,

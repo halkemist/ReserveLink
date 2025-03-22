@@ -22,7 +22,6 @@ class iCalService
    */
   public static function generateIcsFile(
     string $title,
-    string $description,
     string $link,
     User $owner,
     string $startDate,
@@ -40,7 +39,6 @@ class iCalService
       )
     );
     $event->setSummary($title);
-    $event->setDescription($description);
     $event->setOrganizer(new Organizer(
       new EmailAddress($owner->email),
       $owner->name
