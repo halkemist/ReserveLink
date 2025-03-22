@@ -26,12 +26,12 @@ jobs:
             composer install --ignore-platform-reqs --no-scripts
         working-directory: ./reserve-link
 
-      - name: Generate app key
-        run: ./vendor/bin/sail artisan key:generate --force
-        working-directory: ./reserve-link
-
       - name: Start sail
         run: ./vendor/bin/sail up -d
+        working-directory: ./reserve-link
+
+      - name: Generate app key
+        run: ./vendor/bin/sail artisan key:generate --force
         working-directory: ./reserve-link
 
       - name: Run tests
