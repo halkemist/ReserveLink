@@ -64,6 +64,19 @@ cp .env.example .env
 
 - 8025 -> Mailpit dashboard
 
+## Architecture
+
+- MVC
+
+MCD: https://github.com/halkemist/ReserveLink/blob/main/docs/ReserveLink_diagram.png
+CI: https://github.com/halkemist/ReserveLink/blob/main/.github/workflows/ci.yml
+
 ## Workflow
 
-todo
+#### Create a availability slot and get your calendar link
+
+Auth User -> Dashboard -> Create Availability -> Copy Calendar Link
+
+#### Book a meeting
+
+Guest User -> Access from a calendar link -> Choose a slot -> Put your email -> Receive a confirmation email with the meeting link and ics file
