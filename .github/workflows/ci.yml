@@ -30,6 +30,14 @@ jobs:
         run: ./vendor/bin/sail up -d
         working-directory: ./reserve-link
 
+      - name: Wait for MySQL
+        run: |
+          until ./vendor/bin/sail exec mysql mysqladmin ping -h mysql -u${DB_USERNAME} --silent; do
+            echo "Waiting for MySQL..."
+            sleep 2
+          done
+        working-directory: ./reserve-link
+
       - name: Generate app key
         run: ./vendor/bin/sail artisan key:generate --force
         working-directory: ./reserve-link
