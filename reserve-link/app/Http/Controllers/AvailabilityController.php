@@ -4,11 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AvailabilityRequest;
 use App\Models\Availability;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Controller for managing user availability slots.
+ * 
+ * Handles the create, update and delete of time slots of users availabilities for bookings.
+ */
 class AvailabilityController extends Controller
 {
+    /**
+     * Store a new availability slot.
+     * 
+     * Validate request, check timeslot overlap and create the new availability record.
+     * 
+     * @param AvailabilityRequest $request Validated form request.
+     * @return RedirectResponse Redirects back with errors or to dashboard with success message.
+     */
     public function store(AvailabilityRequest $request)
     {
         $authUserId = Auth::id();
@@ -41,6 +53,17 @@ class AvailabilityController extends Controller
             ->with('success', 'Your availability has been successfully added.');
     }
 
+    /**
+     * Update an existing availability slot.
+     * 
+     * Get the requested availability, authorize the user and update the record with validated data.
+     * 
+     * @param int $availabilityId The ID of the availability slot to update.
+     * @param AvailabilityRequest $request Validated form request.
+     * @return RedirectResponse Redirects to dashboard with success message.
+     * @throws AuthorizationException If user not authotized.
+     * @throws ModelNotFoundException If availability not found.
+     */
     public function update($availabilityId, AvailabilityRequest $request)
     {
         $availability = Availability::findOrFail($availabilityId);
@@ -54,6 +77,16 @@ class AvailabilityController extends Controller
             ->with('success', 'Availability updated successfully');
     }
 
+    /**
+     * Delete an existing availability slot.
+     * 
+     * Get the requested availability, authorize the user and delete the record from the DB.
+     * 
+     * @param int $availabilityId The ID of the availability slot to delete.
+     * @return RedirectResponse Redirects to dashboard with success message.
+     * @throws AuthorizationException If user not authorized.
+     * @throws ModelNotFoundException If availability not found.
+     */
     public function destroy($availabilityId)
     {
         $availability = Availability::findOrFail($availabilityId);

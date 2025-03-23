@@ -9,10 +9,22 @@ use Carbon\CarbonPeriod;
 use Illuminate\View\View;
 
 /**
- * Manage slot booking (guest and auth users).
+ * Controller for displaying availability slots.
+ * 
+ * Handles the display of available time slots for booking, taking into account user availabilities, timezone differences and existing bookings.
+ * Accessible to guests and auth users.
  */
 class AvailabilitySlotController extends Controller
 {
+    /**
+     * Display available booking slots for a specific user.
+     * 
+     * Find a user by email, calculate his availabilities for the next 30 days based on his configured weekly schedule, filter out past slots and already booked slots, present them into chronological order.
+     * 
+     * @param string $email Email address of the user whose availabilities are checked.
+     * @return View Calendar view with available slots.
+     * @throws ModelNotFoundException If user not found.
+     */
     public function showUserAvailabilities($email): View
     {
         // Find the user with email and load availabilities

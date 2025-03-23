@@ -8,19 +8,41 @@ use App\Mail\BookingConfirmation;
 use App\Models\Booking;
 use App\Models\User;
 use App\Services\JitsiMeetService;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
 
+/**
+ * Controller for managing booking appointments.
+ * 
+ * Handle the create, update and delete of appointments.
+ */
 class BookingController extends Controller
 {
+    /**
+     * Jitsi Meet integration service.
+     * 
+     * @var JitsiMeetService
+     */
     private $jitsiService;
 
+    /**
+     * Create a new instance.
+     * 
+     * @param JitsiMeetService $jitsiService Service for Jitsi Meet integration.
+     */
     public function __construct(JitsiMeetService $jitsiService)
     {
         $this->jitsiService = $jitsiService;
     }
 
+    /**
+     * Store a new booking appointment.
+     * 
+     * Validate request data, check scheduling conflitcs, create the booking record, generate a meet link and send confirmation emails.
+     * 
+     * @param BookingRequest $request Validated booking request.
+     * @return RedirectResponse Redirect to booking confirmation view.
+     * @throws HttpException If slot already booked.
+     */
     public function store(BookingRequest $request)
     {
         $validated = $request->validated();
@@ -55,11 +77,28 @@ class BookingController extends Controller
         return redirect()->route('booking.confirmation', $booking->id)->with('success', 'Your booking has been successfully created.');
     }
 
+    /**
+     * Display booking confirmation details.
+     * 
+     * Show details of a confirmed booking (time, date, attendees, meeting link).
+     * 
+     * @param Booking $booking Booking to display.
+     * @return View Confirmation view with booking details.
+     */
     public function confirmation(Booking $booking)
     {
         return view('bookings.confirmation', compact('booking'));
     }
 
+    /**
+     * Cancel an existing appointment.
+     * 
+     * Update the booking status to canceled and send an email to both the guest and owner.
+     * 
+     * @param Booking $booking Booking to cancel.
+     * @return RedirectResponse Redirect to booking confirmation view with status.
+     * @throws AuthorizationException If user not authorized to cancel.
+     */
     public function cancel(Booking $booking)
     {
         $this->authorize('cancel', $booking);

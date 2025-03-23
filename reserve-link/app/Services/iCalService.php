@@ -15,10 +15,24 @@ use Eluceo\iCal\Domain\ValueObject\Uri;
 use Eluceo\iCal\Presentation\Component;
 use Eluceo\iCal\Presentation\Factory\CalendarFactory;
 
+/**
+ * Service for generating iCalendar (ICS) files.
+ * 
+ * This service provide functionality to create calendar events in the iCalendar format (RFC 5545) for integration with calendar applications.
+ */
 class iCalService 
 {
   /**
-   * Generate the ICS file
+   * Generate the ICS file for a calendar event.
+   * 
+   * Create an iCalendar component containing an event with the specified details. The component is used to generate a downlodable ICS file.
+   * 
+   * @param string $title Title of the event.
+   * @param string $link URL meet link.
+   * @param User $owner User who own the event.
+   * @param string $startDate Start date and time in 'Y-m-d H:i:s' format.
+   * @param string $endDate End date and time in 'Y-m-d H:i:s' format.
+   * @return Component iCalendar component.
    */
   public static function generateIcsFile(
     string $title,

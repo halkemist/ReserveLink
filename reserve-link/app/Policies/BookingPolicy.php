@@ -10,6 +10,10 @@ class BookingPolicy
 {
     /**
      * Determine who can cancel a booking.
+     * 
+     * @param User $user
+     * @param Booking $booking
+     * @return bool
      */
     public function cancel(User $user, Booking $booking): bool
     {

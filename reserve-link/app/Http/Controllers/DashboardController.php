@@ -5,14 +5,22 @@ namespace App\Http\Controllers;
 use App\Enums\WeekDays;
 use App\Models\Availability;
 use App\Models\Booking;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * Manage availability slots (authentified user).
+ * Manage availability slots and dashboard for authenticated users.
+ * 
+ * This controller handle the display of users dashboard including upcoming bookings and availability settings.
  */
 class DashboardController extends Controller
 {
-    public function index()
+    /**
+     * Display the dashboard with user appointments and availabilities.
+     * 
+     * @return View The dashboard view with user data. 
+     */
+    public function index(): View
     {
         $user = Auth::user();
         

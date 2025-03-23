@@ -10,6 +10,10 @@ class AvailabilityPolicy
 {
     /**
      * Determine whether the user can update the availability.
+     * 
+     * @param User $user
+     * @param Availability $availability
+     * @return bool
      */
     public function update(User $user, Availability $availability): bool
     {
@@ -18,6 +22,10 @@ class AvailabilityPolicy
 
     /**
      * Determine whether the user can delete the availability.
+     * 
+     * @param User $user
+     * @param Availability $availability
+     * @return bool
      */
     public function delete(User $user, Availability $availability): bool
     {
