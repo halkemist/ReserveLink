@@ -12,22 +12,22 @@ use Illuminate\Support\Facades\Mail;
 
 /**
  * Controller for managing booking appointments.
- * 
+ *
  * Handle the create, update and delete of appointments.
  */
 class BookingController extends Controller
 {
     /**
      * Jitsi Meet integration service.
-     * 
+     *
      * @var JitsiMeetService
      */
     private $jitsiService;
 
     /**
      * Create a new instance.
-     * 
-     * @param JitsiMeetService $jitsiService Service for Jitsi Meet integration.
+     *
+     * @param  JitsiMeetService  $jitsiService  Service for Jitsi Meet integration.
      */
     public function __construct(JitsiMeetService $jitsiService)
     {
@@ -36,11 +36,12 @@ class BookingController extends Controller
 
     /**
      * Store a new booking appointment.
-     * 
+     *
      * Validate request data, check scheduling conflitcs, create the booking record, generate a meet link and send confirmation emails.
-     * 
-     * @param BookingRequest $request Validated booking request.
+     *
+     * @param  BookingRequest  $request  Validated booking request.
      * @return RedirectResponse Redirect to booking confirmation view.
+     *
      * @throws HttpException If slot already booked.
      */
     public function store(BookingRequest $request)
@@ -51,16 +52,16 @@ class BookingController extends Controller
         $slotExists = Booking::where('owner_id', $validated['owner_id'])
             ->where('status', '!=', 'canceled')
             ->where(function ($q) use ($validated) {
-                $q->where(function($q2) use ($validated) {
+                $q->where(function ($q2) use ($validated) {
                     $q2->where('start_time', '<', $validated['end_time'])
                         ->where('end_time', '>', $validated['start_time']);
-                })->orWhere(function($q2) use ($validated) {
+                })->orWhere(function ($q2) use ($validated) {
                     $q2->where('start_time', '=', $validated['start_time'])
                         ->where('end_time', '=', $validated['end_time']);
                 });
             })->exists(); // TODO -> in a repository/model
-        
-        abort_if($slotExists, 403, "An appointment has already been scheduled for this slot"); // TODO -> create a policy
+
+        abort_if($slotExists, 403, 'An appointment has already been scheduled for this slot'); // TODO -> create a policy
 
         // Store the new booking entry
         $booking = Booking::create($validated);
@@ -79,10 +80,10 @@ class BookingController extends Controller
 
     /**
      * Display booking confirmation details.
-     * 
+     *
      * Show details of a confirmed booking (time, date, attendees, meeting link).
-     * 
-     * @param Booking $booking Booking to display.
+     *
+     * @param  Booking  $booking  Booking to display.
      * @return View Confirmation view with booking details.
      */
     public function confirmation(Booking $booking)
@@ -92,17 +93,18 @@ class BookingController extends Controller
 
     /**
      * Cancel an existing appointment.
-     * 
+     *
      * Update the booking status to canceled and send an email to both the guest and owner.
-     * 
-     * @param Booking $booking Booking to cancel.
+     *
+     * @param  Booking  $booking  Booking to cancel.
      * @return RedirectResponse Redirect to booking confirmation view with status.
+     *
      * @throws AuthorizationException If user not authorized to cancel.
      */
     public function cancel(Booking $booking)
     {
         $this->authorize('cancel', $booking);
-        
+
         $booking->status = 'canceled';
         $booking->save();
 

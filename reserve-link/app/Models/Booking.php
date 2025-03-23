@@ -17,7 +17,7 @@ class Booking extends Model
         'start_time',
         'end_time',
         'status',
-        'meet_link'
+        'meet_link',
     ];
 
     public function user(): BelongsTo

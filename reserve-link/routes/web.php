@@ -32,13 +32,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Dashboard - Add Availability
-    Route::get('/dashboard/add-availability', function() {
+    Route::get('/dashboard/add-availability', function () {
         return view('calendar.add-availability');
     })->name('availability.add');
     Route::post('/availabilities/store', [AvailabilityController::class, 'store'])->name('availability.store');
 
     // Dashboard - Edit Availability
-    Route::get('/availabilities/{availabilityId}', function($availabilityId) { // TODO -> refacto function into a controller
+    Route::get('/availabilities/{availabilityId}', function ($availabilityId) { // TODO -> refacto function into a controller
         $availability = Availability::findOrFail($availabilityId);
 
         if ($availability->user_id !== Auth::id()) { // TODO -> policy
@@ -51,7 +51,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Dashboard - Delete Availability
     Route::delete('/availabilities/{availabilityId}', [AvailabilityController::class, 'destroy'])->name('availability.destroy');
-    
+
     // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

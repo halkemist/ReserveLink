@@ -4,7 +4,6 @@ namespace App\Mail;
 
 use App\Models\Booking;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -19,7 +18,7 @@ class BookingCancelation extends Mailable
      */
     public function __construct(
         protected Booking $booking,
-        protected Bool $targetIsOwner
+        protected bool $targetIsOwner
     ) {}
 
     /**
@@ -44,7 +43,7 @@ class BookingCancelation extends Mailable
                 'startTime' => $this->booking->start_time,
                 'endTime' => $this->booking->end_time,
                 'status' => $this->booking->status,
-                'description' => $this->targetIsOwner ? 'You have canceled the appointment successfully' : 'The appointment was canceled by the owner'
+                'description' => $this->targetIsOwner ? 'You have canceled the appointment successfully' : 'The appointment was canceled by the owner',
             ],
         );
     }

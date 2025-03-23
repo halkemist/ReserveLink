@@ -21,7 +21,7 @@ class BookingRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
-        if (!$this->has('status')) {
+        if (! $this->has('status')) {
             $this->merge([
                 'status' => 'confirmed',
             ]);
@@ -42,7 +42,7 @@ class BookingRequest extends FormRequest
             'start_time' => 'required|date|after_or_equal:now',
             'end_time' => 'required|date|after:start_time',
             'status' => 'required|in:confirmed,canceled,past',
-            'meet_link' => 'sometimes|nullable|max:255|url:https'
+            'meet_link' => 'sometimes|nullable|max:255|url:https',
         ];
     }
 }

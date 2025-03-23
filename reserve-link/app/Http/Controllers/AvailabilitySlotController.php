@@ -10,7 +10,7 @@ use Illuminate\View\View;
 
 /**
  * Controller for displaying availability slots.
- * 
+ *
  * Handles the display of available time slots for booking, taking into account user availabilities, timezone differences and existing bookings.
  * Accessible to guests and auth users.
  */
@@ -18,19 +18,20 @@ class AvailabilitySlotController extends Controller
 {
     /**
      * Display available booking slots for a specific user.
-     * 
+     *
      * Find a user by email, calculate his availabilities for the next 30 days based on his configured weekly schedule, filter out past slots and already booked slots, present them into chronological order.
-     * 
-     * @param string $email Email address of the user whose availabilities are checked.
+     *
+     * @param  string  $email  Email address of the user whose availabilities are checked.
      * @return View Calendar view with available slots.
+     *
      * @throws ModelNotFoundException If user not found.
      */
     public function showUserAvailabilities($email): View
     {
         // Find the user with email and load availabilities
         $user = User::where('email', $email)->with('availabilities')->first();
-        
-        abort_if(!$user, 404, "User not found");
+
+        abort_if(! $user, 404, 'User not found');
 
         // Look at next 30 days only
         $startDate = Carbon::today();
@@ -47,25 +48,25 @@ class AvailabilitySlotController extends Controller
 
             // Look at all days in 30 days period
             while ($currentDate <= $endDate) {
-                $start = Carbon::parse($currentDate->format('Y-m-d') . ' ' . $availability->start_time, $user->timezone);
-                $end = Carbon::parse($currentDate->format('Y-m-d') . ' ' . $availability->end_time, $user->timezone);
-                
+                $start = Carbon::parse($currentDate->format('Y-m-d').' '.$availability->start_time, $user->timezone);
+                $end = Carbon::parse($currentDate->format('Y-m-d').' '.$availability->end_time, $user->timezone);
+
                 // Make small time slots
-                $period = CarbonPeriod::create($start, $availability->slot_duration . ' minutes', $end->subMinutes($availability->slot_duration));
+                $period = CarbonPeriod::create($start, $availability->slot_duration.' minutes', $end->subMinutes($availability->slot_duration));
 
                 foreach ($period as $slotStart) {
                     $slotEnd = $slotStart->copy()->addMinutes($availability->slot_duration);
-                    
+
                     // Change to UTC time for db check
                     $slotStartUtc = $slotStart->copy()->setTimezone('UTC');
-                    
+
                     // Only show slots in future and not booked
-                    if ($slotStart->gt($now) && 
-                        !Booking::where('owner_id', $user->id)
+                    if ($slotStart->gt($now) &&
+                        ! Booking::where('owner_id', $user->id)
                             ->where('start_time', $slotStartUtc)
                             ->whereIn('status', ['confirmed', 'past'])
                             ->exists()) {
-                            
+
                         $slots[] = [
                             'owner_id' => $user->id,
                             'start_time' => $slotStart->format('Y-m-d H:i:s'),
@@ -76,7 +77,7 @@ class AvailabilitySlotController extends Controller
                         ];
                     }
                 }
-                
+
                 // Go to the next week same day
                 $currentDate->addDays(7);
             }

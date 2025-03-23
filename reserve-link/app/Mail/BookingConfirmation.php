@@ -5,9 +5,7 @@ namespace App\Mail;
 use App\Models\Booking;
 use App\Models\User;
 use App\Services\iCalService;
-use DateTimeImmutable;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
@@ -47,7 +45,7 @@ class BookingConfirmation extends Mailable
                 'startTime' => $this->booking->start_time,
                 'endTime' => $this->booking->end_time,
                 'status' => $this->booking->status,
-                'meetLink' => $this->booking->meet_link
+                'meetLink' => $this->booking->meet_link,
             ],
         );
     }
@@ -60,7 +58,7 @@ class BookingConfirmation extends Mailable
     public function attachments(): array
     {
         $icsComponent = iCalService::generateIcsFile(
-            'Meeting with ' . $this->booking->guest_email,
+            'Meeting with '.$this->booking->guest_email,
             $this->booking->meet_link,
             User::findOrFail($this->booking->owner_id),
             $this->booking->start_time,
@@ -71,7 +69,7 @@ class BookingConfirmation extends Mailable
 
         return [
             Attachment::fromData(fn () => $icsContent, 'meeting.ics')
-            ->withMime('text/calendar; charset=utf-8')
+                ->withMime('text/calendar; charset=utf-8'),
         ];
     }
 }

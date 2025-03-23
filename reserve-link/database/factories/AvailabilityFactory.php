@@ -24,7 +24,7 @@ class AvailabilityFactory extends Factory
             'end_time' => '12:00',
             'slot_duration' => 60,
             'created_at' => now(),
-            'updated_at' => now()
+            'updated_at' => now(),
         ];
     }
 }

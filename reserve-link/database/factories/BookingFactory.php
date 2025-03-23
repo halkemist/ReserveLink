@@ -29,7 +29,7 @@ class BookingFactory extends Factory
             'end_time' => $endTime,
             'status' => $this->faker->randomElement(['confirmed', 'canceled', 'past']),
             'created_at' => now(),
-            'updated_at' => now()
+            'updated_at' => now(),
         ];
     }
 }
