@@ -26,6 +26,12 @@ jobs:
             composer install --ignore-platform-reqs --no-scripts
         working-directory: ./reserve-link
 
+      - name: Install npm dependencies and build assets
+        run: |
+          docker run --rm -v $(pwd):/app -w /app node:18 npm install
+          docker run --rm -v $(pwd):/app -w /app node:18 npm run build
+        working-directory: ./reserve-link
+
       - name: Start sail
         run: ./vendor/bin/sail up -d
         working-directory: ./reserve-link
