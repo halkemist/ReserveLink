@@ -38,6 +38,11 @@ cd reserve-link/
 cp .env.example .env
 ```
 
+#### Start docker (docker or docker desktop)
+```bash
+sudo systemctl start docker
+```
+
 #### Install backend dependencies using docker (only first time)
 ```bash
 sudo docker run --rm -v $(pwd):/app -w /app composer install
