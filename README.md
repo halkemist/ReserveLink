@@ -38,12 +38,22 @@ cd reserve-link/
 cp .env.example .env
 ```
 
-#### Build, create and start the containers (demon)
+#### Start docker (docker or docker desktop)
+```bash
+sudo systemctl start docker
+```
+
+#### Install backend dependencies using docker (only first time)
+```bash
+sudo docker run --rm -v $(pwd):/app -w /app composer install
+```
+
+#### Build, create and start the containers (demon, every day usage)
 ```bash
 ./vendor/bin/sail up -d
 ```
 
-#### Install backend dependencies
+#### Install backend dependencies (every day usage)
 ```bash
 ./vendor/bin/sail composer install
 ```
