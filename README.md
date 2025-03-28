@@ -22,6 +22,7 @@ This is inspired by existing products like [cal](https://cal.com/) or [calendly]
 [![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=fff)](#)
 [![TailwindCSS](https://img.shields.io/badge/Tailwind%20CSS-%2338B2AC.svg?logo=tailwind-css&logoColor=white)](#)
 [![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=fff)](#)
+![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/halkemist/ReserveLink?utm_source=oss&utm_medium=github&utm_campaign=halkemist%2FReserveLink&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
 
 ## Setup
 
